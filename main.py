@@ -5,9 +5,9 @@ import requests
 from copy import copy
 
 # JD Power API token
-JDPOWER_AUTH_TOKEN = "<YOUR_AUTH_TOKEN>"
+JDPOWER_AUTH_TOKEN = ""
 # Region ID for JD Power API request. See JD Power REST API guide to learn more
-REGION_ID = "<YOUR_CURRENT_REGION>"
+REGION_ID = ""
 
 # @function | copy_style
 # @args     | None
@@ -134,7 +134,7 @@ class JDPowerExcel():
 
         for cell in ws[vin_column]:
             vin = cell.value
-            mileage = ws[mileage_column][i].value
+            mileage = ws[mileage_column][i].value or 0
 
             i = i + 1
 
@@ -164,6 +164,10 @@ class JDPowerExcel():
             # "result" key appears only when API request was successful.
             if "result" not in response:
                 print("API request failed!")
+                continue
+
+            if ("error" in response):
+                print(response["error"])
                 continue
 
             # Returning first instance of result
